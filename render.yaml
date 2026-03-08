@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: lexypremium
+    runtime: python
+    pythonVersion: 3.11.6
+    buildCommand: ./build.sh
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.6
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lexypremium-db
+          property: connectionString
+      - key: ADMIN_EMAIL
+        value: sokwilliams41@gmail.com
+      - key: ADMIN_PASSWORD
+        value: Admin54321
+      - key: MONNIFY_API_KEY
+        value: MK_TEST_B8SB2UHJ78
+      - key: MONNIFY_SECRET_KEY
+        value: B0WCBBBUFAXWMZZXAG0XTT3RBXPM3N8J
+      - key: MONNIFY_CONTRACT_CODE
+        value: 8209812860
+      - key: MONNIFY_BASE_URL
+        value: https://sandbox.monnify.com
+      - key: WHATSAPP_PHONE_NUMBER
+        value: +2348108332873
+
+databases:
+  - name: lexypremium-db
+    databaseName: lexypremium
+    user: lexypremium
+    plan: free
