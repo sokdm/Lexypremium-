@@ -3,22 +3,15 @@ import base64
 from io import BytesIO
 from werkzeug.utils import secure_filename
 
-# Try to import qrcode, but don't fail if not available
-try:
-    import qrcode
-    QRCODE_AVAILABLE = True
-except ImportError:
-    QRCODE_AVAILABLE = False
-
 def save_image(file, upload_folder='static/uploads'):
     """Save uploaded image and return filename"""
     if not file or file.filename == '':
         return None
     
     filename = secure_filename(file.filename)
-    # Add timestamp to avoid conflicts
     name, ext = os.path.splitext(filename)
-    filename = f"{name}_{int(os.path.time())}{ext}"
+    import time
+    filename = f"{name}_{int(time.time())}{ext}"
     
     filepath = os.path.join(upload_folder, filename)
     file.save(filepath)
@@ -31,6 +24,5 @@ def format_currency(amount):
     return f"₦{amount:,.2f}"
 
 def generate_qr_code(data):
-    """Generate QR code for payment - DISABLED for deployment"""
-    # Return empty string since Pillow is causing issues
+    """Generate QR code - DISABLED"""
     return ""
