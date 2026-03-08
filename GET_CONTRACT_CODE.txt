@@ -1,0 +1,46 @@
+🎀 HOW TO GET YOUR MONNIFY CONTRACT CODE
+========================================
+
+Since the API endpoint changed, here's how to manually get your contract code:
+
+📱 STEP 1: Login to Monnify Dashboard
+---------------------------------------
+Go to: https://sandbox.monnify.com (for testing)
+   or: https://app.monnify.com (for live)
+
+Use your registered email and password
+
+📋 STEP 2: Find Contract Code
+----------------------------
+Once logged in:
+
+1. Look at the URL or page title - contract code is often displayed there
+2. OR go to: Settings → API Keys & Webhooks
+3. Look for "Contract Code" field
+4. It usually looks like: 1234567890 or TEST_123456
+
+📝 STEP 3: Update Config
+------------------------
+Edit config.py:
+
+MONNIFY_CONTRACT_CODE = 'YOUR_ACTUAL_CONTRACT_CODE'
+
+🔄 STEP 4: For Testing (No Contract Code Yet)
+--------------------------------------------
+If you don't have a contract code yet, the app will use MOCK mode:
+- Creates fake account numbers
+- Shows "Test Bank (Mock)" 
+- You can manually verify payments in admin panel
+- Perfect for development!
+
+🚀 STEP 5: Webhook Setup
+------------------------
+In Monnify Dashboard:
+1. Go to Settings → Webhooks
+2. Add URL: https://your-domain.com/webhook/monnify
+3. Select events: 
+   ☑️ SUCCESSFUL_TRANSACTION
+   ☑️ FAILED_TRANSACTION
+4. Save
+
+✅ That's it! Payments will auto-verify!

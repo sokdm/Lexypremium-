@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.order_number }} - Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-gray-900 text-white z-40 hidden md:block">
+        <div class="p-6 border-b border-gray-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-crown text-white"></i>
+                </div>
+                <span class="font-serif text-xl font-bold">Admin</span>
+            </div>
+        </div>
+        <nav class="p-4 space-y-2">
+            <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 rounded-xl transition-colors">
+                <i class="fas fa-home w-5"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin_products') }}" class="flex items-center gap-3 px-4 py-3 text-gray-400 hover:bg-gray-800 rounded-xl transition-colors">
+                <i class="fas fa-box w-5"></i> Products
+            </a>
+            <a href="{{ url_for('admin_orders') }}" class="flex items-center gap-3 px-4 py-3 bg-brand-600 rounded-xl text-white">
+                <i class="fas fa-shopping-cart w-5"></i> Orders
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="md:ml-64 p-8">
+        <div class="mb-8">
+            <a href="{{ url_for('admin_orders') }}" class="text-gray-500 hover:text-brand-600 flex items-center gap-2 mb-4">
+                <i class="fas fa-arrow-left"></i> Back to Orders
+            </a>
+            <div class="flex items-center gap-4 flex-wrap">
+                <h1 class="font-serif text-3xl font-bold">Order #{{ order.order_number }}</h1>
+                <span class="px-4 py-1 rounded-full text-sm font-medium {% if order.payment_status == 'paid' %}bg-green-100 text-green-700{% else %}bg-yellow-100 text-yellow-700{% endif %}">
+                    {{ order.payment_status.title() }}
+                </span>
+                {% if order.monnify_transaction_reference %}
+                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                    <i class="fas fa-plug mr-1"></i> Monnify
+                </span>
+                {% endif %}
+            </div>
+            <p class="text-gray-500 mt-1">Placed on {{ order.created_at | datetime }}</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Order Details -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Items -->
+                <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="font-serif text-xl font-bold mb-6">Order Items</h2>
+                    <div class="space-y-4">
+                        {% for item in order.items %}
+                        <div class="flex gap-4 p-4 bg-gray-50 rounded-xl">
+                            <div class="w-20 h-20 rounded-lg bg-white overflow-hidden flex-shrink-0">
+                                {% if item.product and item.product.images %}
+                                <img src="{{ url_for('uploaded_file', filename=item.product.images[0].filename) }}" alt="{{ item.product_name }}" class="w-full h-full object-cover">
+                                {% else %}
+                                <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-900">{{ item.product_name }}</h3>
+                                {% if item.length %}
+                                <p class="text-sm text-gray-500">{{ item.length }}</p>
+                                {% endif %}
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-sm text-gray-600">Qty: {{ item.quantity }}</span>
+                                    <span class="font-bold text-brand-600">{{ (item.product_price * item.quantity) | currency }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="border-t border-gray-200 mt-6 pt-6">
+                        <div class="flex justify-between items-center text-xl font-bold">
+                            <span>Total</span>
+                            <span class="text-brand-600">{{ order.total_amount | currency }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shipping Address -->
+                <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="font-serif text-xl font-bold mb-4">Shipping Details</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Full Name</p>
+                            <p class="font-medium">{{ order.full_name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Phone</p>
+                            <p class="font-medium">{{ order.phone }}</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-sm text-gray-500">Email</p>
+                            <p class="font-medium">{{ order.email }}</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-sm text-gray-500">Address</p>
+                            <p class="font-medium">{{ order.address }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">City</p>
+                            <p class="font-medium">{{ order.city }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">State</p>
+                            <p class="font-medium">{{ order.state }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Monnify Payment Details -->
+                {% if order.monnify_transaction_reference %}
+                <div class="bg-blue-50 rounded-2xl shadow-sm p-6 border border-blue-100">
+                    <h2 class="font-serif text-xl font-bold mb-4 text-blue-900">
+                        <i class="fas fa-plug mr-2"></i>Monnify Payment Details
+                    </h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-blue-600">Transaction Reference</p>
+                            <p class="font-medium text-blue-900 font-mono text-sm">{{ order.monnify_transaction_reference }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-blue-600">Payment Reference</p>
+                            <p class="font-medium text-blue-900 font-mono text-sm">{{ order.monnify_payment_reference or 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-blue-600">Virtual Account</p>
+                            <p class="font-medium text-blue-900">{{ order.monnify_account_number or 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-blue-600">Bank</p>
+                            <p class="font-medium text-blue-900">{{ order.monnify_bank_name or 'N/A' }}</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-sm text-blue-600">Account Name</p>
+                            <p class="font-medium text-blue-900">{{ order.monnify_account_name or 'N/A' }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if order.payment_status == 'pending' %}
+                    <div class="mt-4 pt-4 border-t border-blue-200">
+                        <a href="{{ url_for('verify_monnify_payment', id=order.id) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-sync-alt mr-2"></i> Verify Payment via Monnify
+                        </a>
+                        <p class="text-sm text-blue-600 mt-2">Manually check payment status with Monnify API</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Status Update -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="font-serif text-xl font-bold mb-6">Update Status</h2>
+                    <form method="POST" action="" class="space-y-4">
+                        {{ form.hidden_tag() }}
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Order Status</label>
+                            {{ form.status(class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all bg-white") }}
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
+                            {{ form.payment_status(class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all bg-white") }}
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Admin Notes</label>
+                            {{ form.notes(class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all", rows="3", placeholder="Internal notes about this order...") }}
+                        </div>
+                        
+                        <button type="submit" class="w-full py-3 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition-colors">
+                            Update Order
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="font-serif text-xl font-bold mb-4">Actions</h2>
+                    <div class="space-y-3">
+                        <a href="https://wa.me/{{ order.phone|replace('+', '')|replace(' ', '') }}?text=Hi {{ order.full_name }}, regarding your order {{ order.order_number }}" target="_blank" class="block w-full py-3 bg-green-500 text-white rounded-full font-semibold text-center hover:bg-green-600 transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i> Contact Customer
+                        </a>
+                        <button onclick="window.print()" class="block w-full py-3 border border-gray-300 text-gray-700 rounded-full font-semibold text-center hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-print mr-2"></i> Print Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

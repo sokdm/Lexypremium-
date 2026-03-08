@@ -1,0 +1,81 @@
+🎀 LUXEWIGS NG - SETUP INSTRUCTIONS FOR TERMUX
+==============================================
+
+📱 STEP 1: INSTALL TERMUX
+-------------------------
+Download Termux from F-Droid (recommended) or Google Play Store
+
+📁 STEP 2: CREATE PROJECT FOLDER
+--------------------------------
+Run these commands in Termux:
+
+cd ~
+mkdir wig-store
+cd wig-store
+
+📋 STEP 3: CREATE ALL FILES
+----------------------------
+Copy and paste each file from the provided code:
+
+1. First create requirements.txt
+2. Then config.py
+3. Then models.py
+4. Then forms.py
+5. Then utils.py
+6. Then app.py (main application)
+7. Create templates folder and all HTML files
+8. Create install.sh and start.sh
+
+⚡ STEP 4: RUN INSTALLATION
+---------------------------
+chmod +x install.sh
+./install.sh
+
+🚀 STEP 5: START THE APPLICATION
+--------------------------------
+./start.sh
+
+Or manually:
+source venv/bin/activate
+python app.py
+
+🌐 ACCESS THE WEBSITE
+---------------------
+Open your browser and go to:
+http://localhost:5000
+
+For mobile access, find your phone's IP:
+ifconfig
+
+Then access via:
+http://YOUR_IP:5000
+
+🔑 ADMIN ACCESS
+---------------
+Go to: http://localhost:5000/login
+Email: sokwilliams41@gmail.com
+Password: Admin54321
+
+📞 CUSTOMER CONTACT INFO
+------------------------
+WhatsApp: +234 810 833 2873
+Email: sokwilliams41@gmail.com
+
+💡 TIPS
+-------
+- To add products: Login as admin → Products → Add Product
+- To view orders: Login as admin → Orders
+- Images are saved in static/uploads/
+- Database is in instance/wigstore.db
+
+🛠️ TROUBLESHOOTING
+-------------------
+If you get "permission denied":
+chmod +x install.sh start.sh
+
+If pip install fails:
+pip install --upgrade pip
+
+If database errors:
+rm instance/wigstore.db
+python -c "from app import app; from models import db; app.app_context().push(); db.create_all()"

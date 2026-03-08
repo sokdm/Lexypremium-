@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Shop - {{ settings.get('store_name', 'LuxeWigs') }}{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4">Our Collection</h1>
+            <p class="text-gray-600">Discover luxury wigs crafted for queens</p>
+        </div>
+        
+        <!-- Filters -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <!-- Search -->
+                <form class="flex-1 max-w-md" method="GET" action="{{ url_for('shop') }}">
+                    <div class="relative">
+                        <input type="text" name="search" value="{{ search or '' }}" placeholder="Search products..." class="w-full pl-10 pr-4 py-3 rounded-full border border-gray-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 outline-none transition-all">
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </form>
+                
+                <!-- Sort -->
+                <div class="flex items-center gap-4">
+                    <select name="sort" onchange="this.form.submit()" class="px-4 py-3 rounded-full border border-gray-200 focus:border-brand-500 outline-none bg-white cursor-pointer">
+                        <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+                        <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="popular" {% if sort == 'popular' %}selected{% endif %}>Most Popular</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Categories -->
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="{{ url_for('shop') }}" class="px-4 py-2 rounded-full text-sm font-medium {% if not current_category %}bg-brand-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} transition-colors">
+                    All
+                </a>
+                {% for cat in categories %}
+                <a href="{{ url_for('shop', category=cat.slug) }}" class="px-4 py-2 rounded-full text-sm font-medium {% if current_category == cat.slug %}bg-brand-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} transition-colors">
+                    {{ cat.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        {% if products.items %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for product in products.items %}
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover-lift">
+                <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
+                    {% if product.images %}
+                    <img src="{{ url_for('uploaded_file', filename=product.images[0].filename) }}" alt="{{ product.name }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <img src="https://via.placeholder.com/300x400/f3f4f6/9ca3af?text=No+Image" alt="{{ product.name }}" class="w-full h-full object-cover">
+                    {% endif %}
+                    
+                    {% if product.stock <= 0 %}
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <span class="bg-white text-gray-900 px-4 py-2 rounded-full font-bold text-lg">Out of Stock</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if product.original_price and product.original_price > product.price %}
+                    <span class="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">-{{ ((1 - product.price/product.original_price) * 100) | int }}%</span>
+                    {% endif %}
+                    
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                        <a href="{{ url_for('product_detail', slug=product.slug) }}" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-800 hover:bg-brand-600 hover:text-white transition-colors transform hover:scale-110">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        {% if product.stock > 0 %}
+                        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-800 hover:bg-brand-600 hover:text-white transition-colors transform hover:scale-110">
+                                <i class="fas fa-shopping-bag"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="p-5">
+                    {% if product.length %}
+                    <span class="text-xs text-gray-500 uppercase tracking-wider">{{ product.length }}</span>
+                    {% endif %}
+                    <h3 class="font-serif text-lg font-semibold mt-1 mb-2 group-hover:text-brand-600 transition-colors line-clamp-1">{{ product.name }}</h3>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xl font-bold text-brand-600">{{ product.price | currency }}</span>
+                            {% if product.original_price %}
+                            <span class="text-sm text-gray-400 line-through ml-2">{{ product.original_price | currency }}</span>
+                            {% endif %}
+                        </div>
+                        {% if product.stock > 0 and product.stock < 5 %}
+                        <span class="text-xs text-red-500 font-medium">Only {{ product.stock }} left</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if products.pages > 1 %}
+        <div class="mt-12 flex justify-center">
+            <div class="flex space-x-2">
+                {% if products.has_prev %}
+                <a href="{{ url_for('shop', page=products.prev_num, category=current_category, search=search, sort=sort) }}" class="px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                {% endif %}
+                
+                {% for page_num in products.iter_pages(left_edge=2, left_current=2, right_current=3, right_edge=2) %}
+                    {% if page_num %}
+                        {% if page_num == products.page %}
+                        <span class="px-3 py-2 rounded-lg bg-brand-600 text-white font-medium">{{ page_num }}</span>
+                        {% else %}
+                        <a href="{{ url_for('shop', page=page_num, category=current_category, search=search, sort=sort) }}" class="px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">{{ page_num }}</a>
+                        {% endif %}
+                    {% else %}
+                    <span class="px-3 py-2 text-gray-400">...</span>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if products.has_next %}
+                <a href="{{ url_for('shop', page=products.next_num, category=current_category, search=search, sort=sort) }}" class="px-3 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center py-20">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-search text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="font-serif text-2xl font-bold text-gray-800 mb-2">No products found</h3>
+            <p class="text-gray-600 mb-6">Try adjusting your search or browse all products</p>
+            <a href="{{ url_for('shop') }}" class="inline-flex items-center px-6 py-3 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition-colors">
+                View All Products
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

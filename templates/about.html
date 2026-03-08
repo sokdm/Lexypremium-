@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - {{ settings.get('store_name', 'LuxeWigs') }}{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4">About LuxeWigs</h1>
+            <div class="w-24 h-1 bg-brand-500 mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="bg-white rounded-3xl shadow-sm p-8 md:p-12 mb-8">
+            <div class="prose prose-lg max-w-none text-gray-600">
+                <p class="text-xl leading-relaxed mb-6">
+                    Welcome to LuxeWigs NG, your premier destination for luxury human hair wigs in Nigeria. We specialize in providing 100% authentic human hair wigs that elevate your beauty and confidence.
+                </p>
+                
+                <h3 class="font-serif text-2xl font-bold text-gray-900 mt-8 mb-4">Our Story</h3>
+                <p class="mb-4">
+                    Founded with a passion for beauty and quality, LuxeWigs NG has grown to become one of Nigeria's most trusted wig retailers. We understand that every woman deserves to feel confident and beautiful, which is why we source only the finest human hair from ethical suppliers worldwide.
+                </p>
+                
+                <h3 class="font-serif text-2xl font-bold text-gray-900 mt-8 mb-4">Why Choose Us?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-gem text-brand-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 mb-1">Premium Quality</h4>
+                            <p class="text-sm">100% authentic human hair with natural texture and shine.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-headset text-brand-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 mb-1">Expert Support</h4>
+                            <p class="text-sm">Personalized consultation to find your perfect match.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-shipping-fast text-brand-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 mb-1">Fast Delivery</h4>
+                            <p class="text-sm">Nationwide delivery within 2-5 business days.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-shield-alt text-brand-600"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 mb-1">Secure Payment</h4>
+                            <p class="text-sm">Verified bank transfer system with instant confirmation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <a href="{{ url_for('shop') }}" class="inline-flex items-center px-8 py-4 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition-colors">
+                Explore Our Collection <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

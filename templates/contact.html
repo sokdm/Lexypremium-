@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - {{ settings.get('store_name', 'LuxeWigs') }}{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="font-serif text-4xl md:text-5xl font-bold mb-4">Get in Touch</h1>
+            <p class="text-gray-600">We'd love to hear from you</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-3xl shadow-sm p-8">
+                    <h2 class="font-serif text-xl font-bold mb-6">Contact Information</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-brand-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Email</p>
+                                <a href="mailto:{{ settings.get('store_email', 'sokwilliams41@gmail.com') }}" class="text-brand-600 hover:underline">
+                                    {{ settings.get('store_email', 'sokwilliams41@gmail.com') }}
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fab fa-whatsapp text-green-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">WhatsApp</p>
+                                <a href="https://wa.me/2348108332873" target="_blank" class="text-green-600 hover:underline">
+                                    +234 810 833 2873
+                                </a>
+                                <p class="text-sm text-gray-500 mt-1">Click to chat instantly</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Phone</p>
+                                <p class="text-gray-600">+234 810 833 2873</p>
+                                <p class="text-sm text-gray-500 mt-1">Mon-Sat, 9am-6pm WAT</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 pt-8 border-t border-gray-100">
+                        <h4 class="font-semibold mb-4">Follow Us</h4>
+                        <div class="flex gap-4">
+                            <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-brand-600 hover:text-white transition-colors">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-brand-600 hover:text-white transition-colors">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 hover:bg-brand-600 hover:text-white transition-colors">
+                                <i class="fab fa-tiktok"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-3xl shadow-sm p-8">
+                    <h2 class="font-serif text-xl font-bold mb-6">Quick Support</h2>
+                    <p class="text-gray-600 mb-6">Need help choosing the perfect wig? Chat with us directly on WhatsApp for instant assistance.</p>
+                    
+                    <a href="https://wa.me/2348108332873?text=Hi, I need help choosing a wig" target="_blank" class="block w-full py-4 bg-green-500 text-white rounded-full font-bold text-center hover:bg-green-600 transition-colors mb-4 flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp text-xl"></i> Chat on WhatsApp
+                    </a>
+                    
+                    <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+                        <h4 class="font-semibold text-sm mb-2">Business Hours</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li class="flex justify-between"><span>Monday - Friday:</span> <span>9:00 AM - 6:00 PM</span></li>
+                            <li class="flex justify-between"><span>Saturday:</span> <span>10:00 AM - 4:00 PM</span></li>
+                            <li class="flex justify-between"><span>Sunday:</span> <span>Closed</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
